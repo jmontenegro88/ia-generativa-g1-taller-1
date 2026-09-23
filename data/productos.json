@@ -1,0 +1,47 @@
+[
+  {
+    "sku": "SKU-001",
+    "name": "Botella reutilizable",
+    "category": "accesorios",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 18.5,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-002",
+    "name": "Jabones artesanales",
+    "category": "higiene",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 14.0,
+    "refund_policy": "Los productos de higiene abiertos no pueden devolverse, excepto cuando exista un defecto de fabricación."
+  },
+  {
+    "sku": "SKU-003",
+    "name": "Camiseta de algodón orgánico",
+    "category": "ropa",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 32.0,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-004",
+    "name": "Compostera doméstica",
+    "category": "hogar",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 68.0,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-005",
+    "name": "Lámpara solar",
+    "category": "hogar",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 54.5,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  }
+]

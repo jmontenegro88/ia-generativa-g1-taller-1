@@ -1,0 +1,122 @@
+[
+  {
+    "tracking_number": "ECO-10001",
+    "order_id": "ORD-10001",
+    "status": "Entregado",
+    "estimated_delivery": "2026-09-18",
+    "carrier": "EcoExpress",
+    "tracking_url": "https://tracking.example.com/ECO-10001",
+    "customer_id": "CUST-1001",
+    "source": "sistema_pedidos_demo",
+    "updated_at": "2026-09-18T10:30:00Z",
+    "product_name": "Botella reutilizable"
+  },
+  {
+    "tracking_number": "ECO-10002",
+    "order_id": "ORD-10002",
+    "status": "En transito",
+    "estimated_delivery": "2026-09-24",
+    "carrier": "EcoExpress",
+    "tracking_url": "https://tracking.example.com/ECO-10002",
+    "customer_id": "CUST-1002",
+    "source": "sistema_pedidos_demo",
+    "updated_at": "2026-09-21T08:15:00Z",
+    "product_name": "Kit de bolsas reutilizables"
+  },
+  {
+    "tracking_number": "ECO-10003",
+    "order_id": "ORD-10003",
+    "status": "Retrasado",
+    "estimated_delivery": "2026-09-26",
+    "carrier": "VerdeLog",
+    "tracking_url": "https://tracking.example.com/ECO-10003",
+    "customer_id": "CUST-1003",
+    "source": "sistema_pedidos_demo",
+    "updated_at": "2026-09-21T12:00:00Z",
+    "product_name": "Camiseta de algodón orgánico"
+  },
+  {
+    "tracking_number": "ECO-10004",
+    "order_id": "ORD-10004",
+    "status": "Preparando envio",
+    "estimated_delivery": "2026-09-28",
+    "carrier": "EcoExpress",
+    "tracking_url": "https://tracking.example.com/ECO-10004",
+    "customer_id": "CUST-1004",
+    "source": "sistema_pedidos_demo",
+    "updated_at": "2026-09-21T14:10:00Z",
+    "product_name": "Jabones artesanales"
+  },
+  {
+    "tracking_number": "ECO-10005",
+    "order_id": "ORD-10005",
+    "status": "Entregado",
+    "estimated_delivery": "2026-09-15",
+    "carrier": "VerdeLog",
+    "tracking_url": "https://tracking.example.com/ECO-10005",
+    "customer_id": "CUST-1005",
+    "source": "sistema_pedidos_demo",
+    "updated_at": "2026-09-15T18:45:00Z",
+    "product_name": "Cubiertos de bambú"
+  },
+  {
+    "tracking_number": "ECO-10006",
+    "order_id": "ORD-10006",
+    "status": "Cancelado",
+    "estimated_delivery": "No aplica",
+    "carrier": "EcoMarket",
+    "tracking_url": "https://tracking.example.com/ECO-10006",
+    "customer_id": "CUST-1006",
+    "source": "sistema_pedidos_demo",
+    "updated_at": "2026-09-20T09:20:00Z",
+    "product_name": "Detergente ecológico"
+  },
+  {
+    "tracking_number": "ECO-10007",
+    "order_id": "ORD-10007",
+    "status": "En transito",
+    "estimated_delivery": "2026-09-25",
+    "carrier": "VerdeLog",
+    "tracking_url": "https://tracking.example.com/ECO-10007",
+    "customer_id": "CUST-1007",
+    "source": "sistema_pedidos_demo",
+    "updated_at": "2026-09-21T07:04:00Z",
+    "product_name": "Lámpara solar"
+  },
+  {
+    "tracking_number": "ECO-10008",
+    "order_id": "ORD-10008",
+    "status": "Devuelto",
+    "estimated_delivery": "2026-09-20",
+    "carrier": "EcoExpress",
+    "tracking_url": "https://tracking.example.com/ECO-10008",
+    "customer_id": "CUST-1008",
+    "source": "sistema_pedidos_demo",
+    "updated_at": "2026-09-20T11:50:00Z",
+    "product_name": "Bolsa térmica reutilizable"
+  },
+  {
+    "tracking_number": "ECO-10009",
+    "order_id": "ORD-10009",
+    "status": "Retrasado",
+    "estimated_delivery": "2026-09-29",
+    "carrier": "VerdeLog",
+    "tracking_url": "https://tracking.example.com/ECO-10009",
+    "customer_id": "CUST-1009",
+    "source": "sistema_pedidos_demo",
+    "updated_at": "2026-09-21T10:00:00Z",
+    "product_name": "Compostera doméstica"
+  },
+  {
+    "tracking_number": "ECO-10010",
+    "order_id": "ORD-10010",
+    "status": "Entregado",
+    "estimated_delivery": "2026-09-17",
+    "carrier": "EcoExpress",
+    "tracking_url": "https://tracking.example.com/ECO-10010",
+    "customer_id": "CUST-1010",
+    "source": "sistema_pedidos_demo",
+    "updated_at": "2026-09-17T16:35:00Z",
+    "product_name": "Cepillo de bambú"
+  }
+]

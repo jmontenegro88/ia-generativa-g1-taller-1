@@ -1,0 +1,10 @@
+# Dependencias previstas para la fase de implementacion
+openai
+fastapi
+uvicorn
+pydantic
+python-dotenv
+sqlalchemy
+rapidfuzz
+chromadb
+sentence-transformers
