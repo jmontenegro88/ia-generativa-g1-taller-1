@@ -2,6 +2,7 @@
   {
     "sku": "SKU-001",
     "name": "Botella reutilizable",
+    "description": "Botella para transportar y beber agua u otras bebidas durante el día.",
     "category": "accesorios",
     "custom": false,
     "condition": "nuevo",
@@ -11,6 +12,7 @@
   {
     "sku": "SKU-002",
     "name": "Jabones artesanales",
+    "description": "Jabones elaborados artesanalmente para la higiene personal.",
     "category": "higiene",
     "custom": false,
     "condition": "nuevo",
@@ -20,6 +22,7 @@
   {
     "sku": "SKU-003",
     "name": "Camiseta de algodón orgánico",
+    "description": "Camiseta de uso diario confeccionada con algodón orgánico.",
     "category": "ropa",
     "custom": false,
     "condition": "nuevo",
@@ -29,6 +32,7 @@
   {
     "sku": "SKU-004",
     "name": "Compostera doméstica",
+    "description": "Recipiente para compostar en casa residuos orgánicos como cáscaras y restos vegetales.",
     "category": "hogar",
     "custom": false,
     "condition": "nuevo",
@@ -38,10 +42,641 @@
   {
     "sku": "SKU-005",
     "name": "Lámpara solar",
+    "description": "Lámpara recargable con energía solar para iluminación en espacios exteriores.",
     "category": "hogar",
     "custom": false,
     "condition": "nuevo",
     "price": 54.5,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-006",
+    "name": "Jabón artesanal de avena",
+    "description": "Jabón en barra para la limpieza diaria de manos y cuerpo, con avena.",
+    "category": "higiene",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 8.5,
+    "refund_policy": "Los productos de higiene abiertos no pueden devolverse, excepto cuando exista un defecto de fabricación."
+  },
+  {
+    "sku": "SKU-007",
+    "name": "Jabón artesanal de carbón activado",
+    "description": "Jabón en barra para la limpieza de manos y cuerpo, elaborado con carbón activado.",
+    "category": "higiene",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 9.0,
+    "refund_policy": "Los productos de higiene abiertos no pueden devolverse, excepto cuando exista un defecto de fabricación."
+  },
+  {
+    "sku": "SKU-008",
+    "name": "Jabón artesanal de aloe vera",
+    "description": "Jabón en barra con aloe vera para la higiene diaria de manos y cuerpo.",
+    "category": "higiene",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 8.75,
+    "refund_policy": "Los productos de higiene abiertos no pueden devolverse, excepto cuando exista un defecto de fabricación."
+  },
+  {
+    "sku": "SKU-009",
+    "name": "Camiseta básica de algodón orgánico",
+    "description": "Camiseta de manga corta y cuello redondo para uso diario, confeccionada con algodón orgánico.",
+    "category": "ropa",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 29.0,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-010",
+    "name": "Camiseta de manga larga",
+    "description": "Camiseta de manga larga para uso casual, confeccionada con algodón orgánico.",
+    "category": "ropa",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 36.0,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-011",
+    "name": "Camiseta con estampado botánico",
+    "description": "Camiseta de algodón orgánico con estampado inspirado en motivos botánicos.",
+    "category": "ropa",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 34.0,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-012",
+    "name": "Pantalón jogger de algodón",
+    "description": "Pantalón casual tipo jogger, con cintura elástica y tela de algodón.",
+    "category": "ropa",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 42.0,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-013",
+    "name": "Pantalón cargo de algodón",
+    "description": "Pantalón casual de algodón con bolsillos laterales tipo cargo.",
+    "category": "ropa",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 49.0,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-014",
+    "name": "Pantalón casual de lino y algodón",
+    "description": "Pantalón de corte casual confeccionado con una mezcla de lino y algodón.",
+    "category": "ropa",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 55.0,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-015",
+    "name": "Botella de acero inoxidable",
+    "description": "Recipiente reutilizable de acero inoxidable para llevar y beber agua u otras bebidas; capacidad de 750 ml.",
+    "category": "accesorios",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 24.0,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-016",
+    "name": "Termo reutilizable de 500 ml",
+    "description": "Recipiente portátil reutilizable para transportar bebidas calientes o frías; capacidad de 500 ml.",
+    "category": "accesorios",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 27.5,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-017",
+    "name": "Recipiente hermético de vidrio de 1 litro",
+    "description": "Contenedor de vidrio con tapa para guardar y transportar alimentos; capacidad de 1 litro.",
+    "category": "hogar",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 16.0,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-018",
+    "name": "Contenedor reutilizable para alimentos",
+    "description": "Recipiente reutilizable con tapa para almacenar o llevar alimentos preparados; capacidad de 800 ml.",
+    "category": "hogar",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 12.5,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-019",
+    "name": "Jabón artesanal de miel",
+    "description": "Jabón en barra con miel para la limpieza diaria de manos y cuerpo.",
+    "category": "higiene",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 9.25,
+    "refund_policy": "Los productos de higiene abiertos no pueden devolverse, excepto cuando exista un defecto de fabricación."
+  },
+  {
+    "sku": "SKU-020",
+    "name": "Jabón artesanal de lavanda",
+    "description": "Jabón en barra con aroma de lavanda para la higiene diaria.",
+    "category": "higiene",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 9.25,
+    "refund_policy": "Los productos de higiene abiertos no pueden devolverse, excepto cuando exista un defecto de fabricación."
+  },
+  {
+    "sku": "SKU-021",
+    "name": "Jabón artesanal de coco",
+    "description": "Jabón en barra elaborado con aceite de coco para la limpieza de manos y cuerpo.",
+    "category": "higiene",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 9.5,
+    "refund_policy": "Los productos de higiene abiertos no pueden devolverse, excepto cuando exista un defecto de fabricación."
+  },
+  {
+    "sku": "SKU-022",
+    "name": "Jabón artesanal de romero",
+    "description": "Jabón en barra con romero para la higiene cotidiana de manos y cuerpo.",
+    "category": "higiene",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 9.0,
+    "refund_policy": "Los productos de higiene abiertos no pueden devolverse, excepto cuando exista un defecto de fabricación."
+  },
+  {
+    "sku": "SKU-023",
+    "name": "Jabón artesanal de caléndula",
+    "description": "Jabón en barra con caléndula para la limpieza diaria de manos y cuerpo.",
+    "category": "higiene",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 9.5,
+    "refund_policy": "Los productos de higiene abiertos no pueden devolverse, excepto cuando exista un defecto de fabricación."
+  },
+  {
+    "sku": "SKU-024",
+    "name": "Jabón artesanal de café",
+    "description": "Jabón en barra con café molido para la limpieza corporal.",
+    "category": "higiene",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 9.75,
+    "refund_policy": "Los productos de higiene abiertos no pueden devolverse, excepto cuando exista un defecto de fabricación."
+  },
+  {
+    "sku": "SKU-025",
+    "name": "Jabón artesanal de arcilla verde",
+    "description": "Jabón en barra con arcilla verde para la higiene diaria de manos y cuerpo.",
+    "category": "higiene",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 9.5,
+    "refund_policy": "Los productos de higiene abiertos no pueden devolverse, excepto cuando exista un defecto de fabricación."
+  },
+  {
+    "sku": "SKU-026",
+    "name": "Jabón artesanal de limón",
+    "description": "Jabón en barra con aroma cítrico para la limpieza diaria de manos y cuerpo.",
+    "category": "higiene",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 8.75,
+    "refund_policy": "Los productos de higiene abiertos no pueden devolverse, excepto cuando exista un defecto de fabricación."
+  },
+  {
+    "sku": "SKU-027",
+    "name": "Jabón artesanal de leche de cabra",
+    "description": "Jabón en barra elaborado con leche de cabra para la higiene cotidiana.",
+    "category": "higiene",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 10.0,
+    "refund_policy": "Los productos de higiene abiertos no pueden devolverse, excepto cuando exista un defecto de fabricación."
+  },
+  {
+    "sku": "SKU-028",
+    "name": "Jabón artesanal de menta",
+    "description": "Jabón en barra con aroma de menta para la limpieza diaria de manos y cuerpo.",
+    "category": "higiene",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 9.0,
+    "refund_policy": "Los productos de higiene abiertos no pueden devolverse, excepto cuando exista un defecto de fabricación."
+  },
+  {
+    "sku": "SKU-029",
+    "name": "Camiseta de algodón orgánico color blanco",
+    "description": "Camiseta blanca de manga corta y cuello redondo, confeccionada con algodón orgánico.",
+    "category": "ropa",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 29.0,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-030",
+    "name": "Camiseta de algodón orgánico color negro",
+    "description": "Camiseta negra de manga corta para uso diario, confeccionada con algodón orgánico.",
+    "category": "ropa",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 29.0,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-031",
+    "name": "Camiseta de algodón orgánico color verde",
+    "description": "Camiseta verde de manga corta y cuello redondo, confeccionada con algodón orgánico.",
+    "category": "ropa",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 30.0,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-032",
+    "name": "Camiseta oversize de algodón",
+    "description": "Camiseta de corte amplio y manga corta para uso casual, confeccionada con algodón.",
+    "category": "ropa",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 35.0,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-033",
+    "name": "Camiseta deportiva de tejido reciclado",
+    "description": "Camiseta ligera de manga corta para actividad física, confeccionada con tejido reciclado.",
+    "category": "ropa",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 38.0,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-034",
+    "name": "Camiseta polo de algodón",
+    "description": "Camiseta tipo polo de manga corta con cuello y botones, confeccionada con algodón.",
+    "category": "ropa",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 39.0,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-035",
+    "name": "Camiseta sin mangas de algodón",
+    "description": "Camiseta sin mangas para uso casual, confeccionada con algodón.",
+    "category": "ropa",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 25.0,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-036",
+    "name": "Camiseta de manga larga color azul",
+    "description": "Camiseta azul de manga larga y cuello redondo, confeccionada con algodón.",
+    "category": "ropa",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 36.0,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-037",
+    "name": "Camiseta gráfica de fauna",
+    "description": "Camiseta de algodón con estampado gráfico inspirado en la fauna.",
+    "category": "ropa",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 34.0,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-038",
+    "name": "Camiseta de cuello en V",
+    "description": "Camiseta de manga corta y cuello en V para uso cotidiano, confeccionada con algodón.",
+    "category": "ropa",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 31.0,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-039",
+    "name": "Pantalón recto de algodón",
+    "description": "Pantalón de corte recto para uso casual, confeccionado con algodón.",
+    "category": "ropa",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 48.0,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-040",
+    "name": "Pantalón de mezclilla reciclada",
+    "description": "Pantalón tipo jean confeccionado con mezclilla que incorpora fibras recicladas.",
+    "category": "ropa",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 62.0,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-041",
+    "name": "Pantalón chino de algodón",
+    "description": "Pantalón chino de corte casual confeccionado con algodón.",
+    "category": "ropa",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 52.0,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-042",
+    "name": "Pantalón de lino",
+    "description": "Pantalón ligero de corte casual confeccionado con lino.",
+    "category": "ropa",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 58.0,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-043",
+    "name": "Pantalón de vestir clásico",
+    "description": "Pantalón de vestir de corte clásico para ocasiones formales o de trabajo.",
+    "category": "ropa",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 64.0,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-044",
+    "name": "Pantalón de tela reciclada",
+    "description": "Pantalón casual confeccionado con una mezcla de fibras textiles recicladas.",
+    "category": "ropa",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 51.0,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-045",
+    "name": "Pantalón palazzo de algodón",
+    "description": "Pantalón de pierna amplia y corte palazzo confeccionado con algodón.",
+    "category": "ropa",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 57.0,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-046",
+    "name": "Pantalón corto de algodón",
+    "description": "Pantalón corto tipo bermuda para uso casual, confeccionado con algodón.",
+    "category": "ropa",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 33.0,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-047",
+    "name": "Leggings de algodón",
+    "description": "Pantalón ajustado tipo leggings para uso diario, confeccionado con algodón elástico.",
+    "category": "ropa",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 37.0,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-048",
+    "name": "Pantalón de trabajo con bolsillos",
+    "description": "Pantalón resistente de estilo utilitario con bolsillos para guardar objetos pequeños.",
+    "category": "ropa",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 59.0,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-049",
+    "name": "Botella de vidrio reutilizable",
+    "description": "Recipiente de vidrio reutilizable con tapa para transportar agua o bebidas; capacidad de 600 ml.",
+    "category": "accesorios",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 19.0,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-050",
+    "name": "Botella deportiva con boquilla",
+    "description": "Botella reutilizable con boquilla para beber agua durante actividades deportivas; capacidad de 700 ml.",
+    "category": "accesorios",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 17.5,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-051",
+    "name": "Taza térmica reutilizable",
+    "description": "Recipiente portátil con tapa para llevar bebidas calientes o frías; capacidad de 350 ml.",
+    "category": "accesorios",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 21.0,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-052",
+    "name": "Vaso reutilizable de acero",
+    "description": "Vaso reutilizable de acero inoxidable para tomar bebidas en casa o fuera de ella; capacidad de 400 ml.",
+    "category": "accesorios",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 18.0,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-053",
+    "name": "Jarra de vidrio con tapa",
+    "description": "Jarra reutilizable de vidrio con tapa para servir o guardar agua y otras bebidas; capacidad de 1,5 litros.",
+    "category": "hogar",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 23.0,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-054",
+    "name": "Set de recipientes de vidrio",
+    "description": "Juego de tres recipientes de vidrio con tapa para guardar y transportar alimentos.",
+    "category": "hogar",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 32.0,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-055",
+    "name": "Recipiente plegable de silicona",
+    "description": "Contenedor plegable de silicona con tapa para almacenar o llevar alimentos.",
+    "category": "hogar",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 20.0,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-056",
+    "name": "Botella reutilizable con filtro",
+    "description": "Botella para transportar agua con filtro integrado; capacidad de 650 ml.",
+    "category": "accesorios",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 26.0,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-057",
+    "name": "Lonchera térmica reutilizable",
+    "description": "Bolsa térmica reutilizable para transportar recipientes y alimentos durante el día.",
+    "category": "accesorios",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 28.0,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-058",
+    "name": "Frasco de vidrio con tapa de bambú",
+    "description": "Frasco de vidrio con tapa de bambú para almacenar alimentos secos; capacidad de 750 ml.",
+    "category": "hogar",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 15.0,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-059",
+    "name": "Bolsa reutilizable de algodón",
+    "description": "Bolsa de tela de algodón para llevar compras y reducir el uso de bolsas desechables.",
+    "category": "accesorios",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 12.0,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-060",
+    "name": "Set de cubiertos reutilizables",
+    "description": "Juego portátil de cubiertos reutilizables para llevar y consumir alimentos fuera de casa.",
+    "category": "accesorios",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 14.5,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-061",
+    "name": "Cepillo de dientes de bambú",
+    "description": "Cepillo manual para la higiene dental con mango de bambú.",
+    "category": "higiene",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 6.5,
+    "refund_policy": "Los productos de higiene abiertos no pueden devolverse, excepto cuando exista un defecto de fabricación."
+  },
+  {
+    "sku": "SKU-062",
+    "name": "Bolsa para compras plegable",
+    "description": "Bolsa ligera y plegable para llevar compras; se guarda fácilmente cuando no se utiliza.",
+    "category": "accesorios",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 10.0,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-063",
+    "name": "Toalla de algodón orgánico",
+    "description": "Toalla de algodón orgánico para uso doméstico después del baño o para secarse las manos.",
+    "category": "hogar",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 22.0,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-064",
+    "name": "Delantal de algodón reciclado",
+    "description": "Delantal reutilizable de algodón reciclado para cocinar o realizar tareas domésticas.",
+    "category": "hogar",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 24.0,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-065",
+    "name": "Maceta de fibra reciclada",
+    "description": "Maceta para plantas de interior o exterior fabricada con material reciclado.",
+    "category": "hogar",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 18.0,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-066",
+    "name": "Estuche reutilizable para alimentos",
+    "description": "Estuche lavable para guardar y transportar alimentos pequeños o refrigerios.",
+    "category": "hogar",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 11.5,
+    "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
+  },
+  {
+    "sku": "SKU-067",
+    "name": "Esponja vegetal de luffa",
+    "description": "Esponja vegetal para la limpieza corporal o el lavado doméstico.",
+    "category": "higiene",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 7.0,
+    "refund_policy": "Los productos de higiene abiertos no pueden devolverse, excepto cuando exista un defecto de fabricación."
+  },
+  {
+    "sku": "SKU-068",
+    "name": "Kit de envolturas reutilizables para alimentos",
+    "description": "Juego de envolturas reutilizables para cubrir recipientes y conservar alimentos.",
+    "category": "hogar",
+    "custom": false,
+    "condition": "nuevo",
+    "price": 16.5,
     "refund_policy": "Los productos nuevos y sin uso pueden devolverse dentro de 30 días."
   }
 ]

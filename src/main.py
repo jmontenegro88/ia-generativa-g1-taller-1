@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from pathlib import Path
-
 from fastapi import FastAPI, HTTPException
 
 from src.models import (
@@ -17,6 +15,11 @@ from src.models import (
     TriageResponse,
 )
 from src.openai_client import OpenAIClient
+from src.knowledge_base import (
+    KnowledgeBase,
+    format_knowledge_context,
+    knowledge_sources,
+)
 from src.prompts import (
     build_order_status_prompt,
     build_policy_prompt,
@@ -34,6 +37,7 @@ from src.retrieval import (
 
 app = FastAPI(title="EcoMarket AI Assistant", version="0.1.0")
 openai_client = OpenAIClient()
+knowledge_base = KnowledgeBase()
 
 
 def local_order_response(order):
@@ -52,31 +56,19 @@ def local_order_response(order):
     )
 
 
-def local_return_response(product, query):
-    category = (query.category or "").lower()
-    condition = (query.condition or "").lower()
-    days = query.received_days_ago
-    is_hygiene_open = category == "higiene" and condition == "abierto"
-    is_custom = bool(query.custom or product.get("custom", False))
-    eligible = days is not None and days <= 30 and not is_hygiene_open and not is_custom
-    if eligible:
-        reason = "El producto está dentro del plazo de 30 días y no presenta una restricción registrada."
-        next_steps = ["Solicitar la devolución desde el canal de soporte.", "Enviar el producto para revisión."]
-    else:
-        reason = "El producto no cumple las condiciones disponibles para una devolución automática."
-        next_steps = ["Revisar el caso con un agente de EcoMarket."]
+def local_return_response(sources):
+    reason = "No puedo confirmar automáticamente la elegibilidad; la política recuperada requiere revisión humana."
     return ReturnEvaluationResponse(
-        es_elegible=eligible,
+        es_elegible=False,
         motivo=reason,
-        pasos_siguientes=next_steps,
-        informacion_faltante=[] if days is not None else ["received_days_ago"],
-        requiere_agente=not eligible,
+        pasos_siguientes=["Solicitar a un agente que revise la política y los datos del producto."],
+        requiere_agente=True,
         respuesta_cliente=reason,
-        fuentes=["politica_devoluciones_demo", "catalogo_demo"],
+        fuentes=sources,
     )
 
 
-def local_product_response(product, customer_message: str):
+def local_product_response(product, sources):
     return ProductInfoResponse(
         encontrado=True,
         nombre=product["name"],
@@ -84,18 +76,29 @@ def local_product_response(product, customer_message: str):
         precio=product.get("price"),
         condicion=product.get("condition"),
         personalizable=bool(product.get("custom", False)),
-        mensaje_cliente=f"He revisado la información del producto {product['name']}. Puedes consultar su categoría, precio y condiciones generales.",
+        mensaje_cliente=(
+            f"{product['name']}: categoría {product.get('category', 'no especificada')}; "
+            f"precio {product.get('price', 'no especificado')}; "
+            f"condición {product.get('condition', 'no especificada')}."
+        ),
         requiere_agente=False,
-        fuentes=["catalogo_demo"],
+        fuentes=sources,
     )
 
 
-def local_policy_response(question: str, category: str | None = None):
+def local_policy_response(context: str, sources):
+    if context:
+        answer = (
+            "La generación automática no está disponible. Estos son los fragmentos "
+            f"recuperados para responder la consulta: {context}"
+        )
+    else:
+        answer = "No se recuperó una regla aplicable; un agente debe revisar la consulta."
     return PolicyResponse(
-        respuesta="La política disponible indica que los productos nuevos tienen devoluciones dentro de 30 días, pero los productos de higiene abiertos o personalizados requieren revisión humana.",
-        regla_aplicada="devoluciones_y_excepciones",
-        fuentes=["politica_devoluciones_demo"],
-        requiere_agente=category is not None and category.lower() in {"higiene", "personalizado"},
+        respuesta=answer,
+        regla_aplicada=None,
+        fuentes=sources,
+        requiere_agente=True,
     )
 
 
@@ -179,25 +182,40 @@ def return_evaluation(query: ReturnQuery):
             "requiere_agente": True,
         })
 
-    policy = """Los productos nuevos y sin uso pueden devolverse dentro de los 30 días posteriores a la entrega.
-Los productos defectuosos o dañados pueden devolverse dentro de los 30 días, con descripción del problema y evidencia cuando sea posible.
-Los productos perecederos no pueden devolverse por razones de seguridad, excepto cuando exista un daño o defecto confirmado al recibirlos.
-Los productos de higiene abiertos no pueden devolverse, excepto cuando exista un defecto de fabricación.
-Los productos personalizados no pueden devolverse salvo defecto comprobado.
-El reembolso se procesa después de recibir y revisar el producto.
-Los casos ambiguos o que impliquen una compensación especial deben escalarse a un agente."""
-    prompt = build_return_prompt(policy, product, query.model_dump_json())
-    result = openai_client.generate(
-        prompt,
-        schema=ReturnEvaluationResponse.model_json_schema(),
-        schema_name="return_evaluation_response",
+    policy_query = (
+        f"Evaluar devolución: {product['name']}; categoría: {query.category or product.get('category')}; "
+        f"condición: {query.condition}; días desde entrega: {query.received_days_ago}; "
+        f"motivo: {query.reason or 'no especificado'}."
     )
-    if result.get("fallback"):
-        response = local_return_response(product, query)
-        mode = "local_fallback"
+    policy_documents = knowledge_base.search(
+        policy_query,
+        document_type="politica",
+        category="devoluciones",
+    )
+    policy_context = format_knowledge_context(policy_documents)
+    sources = knowledge_sources(policy_documents)
+    if not any(source.startswith("data/productos.json") for source in sources):
+        sources.append("data/productos.json")
+
+    if not policy_documents:
+        response = local_return_response(sources)
+        response.motivo = "No se recuperó la política vigente; no se puede confirmar la elegibilidad."
+        response.respuesta_cliente = response.motivo
+        mode = "human_escalation"
     else:
-        response = ReturnEvaluationResponse.model_validate(result["data"])
-        mode = "openai"
+        prompt = build_return_prompt(policy_context, product, query.model_dump_json())
+        result = openai_client.generate(
+            prompt,
+            schema=ReturnEvaluationResponse.model_json_schema(),
+            schema_name="return_evaluation_response",
+        )
+        if result.get("fallback"):
+            response = local_return_response(sources)
+            mode = "local_fallback"
+        else:
+            response = ReturnEvaluationResponse.model_validate(result["data"])
+            mode = "openai"
+    response.fuentes = sources
     return {
         "product": product,
         "query": query.model_dump(),
@@ -209,35 +227,41 @@ Los casos ambiguos o que impliquen una compensación especial deben escalarse a 
 @app.post("/api/products/search")
 def product_search(query: ProductSearchQuery):
     products = load_products()
+    knowledge_documents = []
+    product_query = query.query or query.product_name
+    semantic_match = False
     if query.product_name:
         product = find_product_by_name(products, query.product_name)
-        if product is None:
-            raise HTTPException(status_code=404, detail={
-                "encontrado": False,
-                "nombre": query.product_name,
-                "mensaje_cliente": "No encontré ese producto en el catálogo actual.",
-                "requiere_agente": False,
-            })
-        context_product = product
+        if product is not None:
+            candidate_products = [product]
+        else:
+            semantic_match = True
+            candidate_products = products
+            product_query = query.product_name
     elif query.category:
-        matches = find_products_by_category(products, query.category)
-        if not matches:
+        candidate_products = find_products_by_category(products, query.category)
+        if not candidate_products:
             raise HTTPException(status_code=404, detail={
                 "encontrado": False,
                 "categoria": query.category,
                 "mensaje_cliente": "No encontré productos para esa categoría.",
                 "requiere_agente": False,
             })
-        context_product = matches[0]
     elif query.query:
-        product = next((item for item in products if query.query.lower() in item["name"].lower()), None)
-        if product is None:
-            raise HTTPException(status_code=404, detail={
-                "encontrado": False,
-                "mensaje_cliente": "No encontré ningún producto que coincida con esa búsqueda.",
-                "requiere_agente": False,
-            })
-        context_product = product
+        exact_or_contained_product = next(
+            (
+                item
+                for item in products
+                if query.query.casefold() in item["name"].casefold()
+            ),
+            None,
+        )
+        if exact_or_contained_product:
+            candidate_products = [exact_or_contained_product]
+        else:
+            semantic_match = True
+            candidate_products = products
+            product_query = query.query
     else:
         raise HTTPException(status_code=400, detail={
             "encontrado": False,
@@ -245,20 +269,107 @@ def product_search(query: ProductSearchQuery):
             "requiere_agente": False,
         })
 
-    prompt = build_product_prompt(context_product, query.model_dump_json())
+    if semantic_match:
+        knowledge_documents = knowledge_base.search(
+            product_query or "",
+            document_type="producto",
+            k=len(products),
+        )
+        if not knowledge_documents:
+            raise HTTPException(status_code=404, detail={
+                "encontrado": False,
+                "nombre": product_query,
+                "mensaje_cliente": "No fue posible identificar un producto relacionado en el catálogo con esa búsqueda.",
+                "requiere_agente": False,
+            })
+    else:
+        knowledge_documents = knowledge_base.search(
+            candidate_products[0]["name"],
+            document_type="producto",
+            k=len(products),
+        )
+
+    candidate_skus = {str(item["sku"]) for item in candidate_products}
+    knowledge_documents = [
+        document
+        for document in knowledge_documents
+        if str(document.metadata.get("sku")) in candidate_skus
+    ]
+    ordered_candidate_products = [
+        item
+        for item in products
+        if str(item["sku"]) in candidate_skus
+    ]
+    sources_by_sku = {
+        str(item["sku"]): f"data/productos.json (SKU {item['sku']})"
+        for item in ordered_candidate_products
+    }
+    prompt = build_product_prompt(
+        ordered_candidate_products,
+        query.model_dump_json(),
+    )
     result = openai_client.generate(
         prompt,
         schema=ProductInfoResponse.model_json_schema(),
         schema_name="product_info_response",
     )
     if result.get("fallback"):
-        response = local_product_response(context_product, query.model_dump_json())
+        if semantic_match or len(ordered_candidate_products) > 1:
+            raise HTTPException(
+                status_code=503,
+                detail={
+                    "mensaje_cliente": (
+                        "No se pudo seleccionar un producto del catálogo con suficiente "
+                        "confianza en este momento. Intenta nuevamente o solicita ayuda a un agente."
+                    ),
+                    "requiere_agente": True,
+                },
+            )
+        context_product = ordered_candidate_products[0]
+        selected_sku = str(context_product["sku"])
+        response = local_product_response(
+            context_product,
+            [sources_by_sku[selected_sku]],
+        )
         mode = "local_fallback"
     else:
         response = ProductInfoResponse.model_validate(result["data"])
         mode = "openai"
+        if not response.encontrado:
+            raise HTTPException(status_code=404, detail={
+                "encontrado": False,
+                "nombre": product_query or query.category or query.product_name,
+                "mensaje_cliente": response.mensaje_cliente,
+                "requiere_agente": response.requiere_agente,
+            })
+        context_product = next(
+            (
+                item
+                for item in ordered_candidate_products
+                if item["name"].casefold() == response.nombre.strip().casefold()
+            ),
+            None,
+        )
+        if context_product is None:
+            raise HTTPException(
+                status_code=502,
+                detail="El modelo seleccionó un producto que no está entre los candidatos del catálogo.",
+            )
+        response.nombre = context_product["name"]
+        response.categoria = context_product.get("category")
+        response.precio = context_product.get("price")
+        response.condicion = context_product.get("condition")
+        response.personalizable = bool(context_product.get("custom", False))
+        sources = [sources_by_sku[str(context_product["sku"])]]
+        knowledge_documents = [
+            document
+            for document in knowledge_documents
+            if str(document.metadata.get("sku")) == str(context_product["sku"])
+        ]
+        sources = knowledge_sources(knowledge_documents) or sources
+    response.fuentes = sources
     return {
-        "product": context_product,
+        "product": context_product if response.encontrado else None,
         "response": response.model_dump(),
         "mode": mode,
     }
@@ -266,20 +377,35 @@ def product_search(query: ProductSearchQuery):
 
 @app.post("/api/policies/answer")
 def policy_answer(query: PolicyQuery):
-    policy_path = Path(__file__).resolve().parent.parent / "data" / "politica_devoluciones.md"
-    policy_text = policy_path.read_text(encoding="utf-8") if policy_path.exists() else "No hay política disponible."
-    prompt = build_policy_prompt(policy_text, query.question, query.category)
+    policy_documents = knowledge_base.search(
+        query.question,
+        document_type="politica",
+        category=query.category,
+    )
+    policy_context = format_knowledge_context(policy_documents)
+    sources = knowledge_sources(policy_documents)
+    if not policy_documents:
+        response = local_policy_response("", sources)
+        mode = "human_escalation"
+        return {
+            "query": query.model_dump(),
+            "response": response.model_dump(),
+            "mode": mode,
+        }
+
+    prompt = build_policy_prompt(policy_context, query.question, query.category)
     result = openai_client.generate(
         prompt,
         schema=PolicyResponse.model_json_schema(),
         schema_name="policy_response",
     )
     if result.get("fallback"):
-        response = local_policy_response(query.question, query.category)
+        response = local_policy_response(policy_context, sources)
         mode = "local_fallback"
     else:
         response = PolicyResponse.model_validate(result["data"])
         mode = "openai"
+    response.fuentes = sources
     return {
         "query": query.model_dump(),
         "response": response.model_dump(),
