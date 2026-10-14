@@ -8,3 +8,8 @@ sqlalchemy
 rapidfuzz
 chromadb
 sentence-transformers
+langchain-chroma
+langchain-huggingface
+langchain-text-splitters
+pypdf
+python-docx

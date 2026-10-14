@@ -1,8 +1,14 @@
 # EcoMarket AI Assistant
 
-Este proyecto implementa un asistente de atención al cliente para EcoMarket con una arquitectura basada en IA generativa, recuperación de contexto y validación estructurada de respuestas. La solución está pensada para atender consultas reales de soporte sobre pedidos, devoluciones, catálogo, políticas y clasificación de incidencias.
+Este proyecto implementa un asistente de demostración para EcoMarket con una arquitectura basada en IA generativa, recuperación de contexto y validación estructurada de respuestas. La solución cubre escenarios de soporte sobre pedidos, devoluciones, catálogo, políticas y clasificación de incidencias.
 
 La idea principal es combinar datos operativos del negocio con prompts bien definidos y el modelo seleccionado en la parte documental, GPT-6 Sol, para responder con precisión, control y trazabilidad, evitando que el modelo invente información.
+
+## Entrega del Taller 2
+
+- [Fase 1: componentes RAG](./03_fase_1_componentes_rag.md)
+- [Fase 2: base de conocimiento y chunking](./04_fase_2_base_conocimiento.md)
+- [Fase 3: integración, ejecución y limitaciones](./05_fase_3_integracion_y_limitaciones.md)
 
 ---
 
@@ -21,15 +27,23 @@ El sistema está pensado para resolver varias tareas de soporte, no solo dos:
 
 ## 2. Qué se implementó
 
-La aplicación usa un enfoque RAG híbrido con estas capas:
+La aplicación implementa una arquitectura híbrida con estas capas:
 
 - recuperación exacta de pedidos desde archivos JSON
-- búsqueda de productos por catálogo
-- lectura de la política de devoluciones como fuente normativa
+- recuperación semántica con LangChain y Chroma para políticas y catálogo
+- búsqueda exacta por nombre o categoría en el catálogo
 - prompt engineering para cada caso de uso
 - validación de salida con esquemas JSON estrictos
-- fallback local si OpenAI no responde correctamente
+- escalamiento seguro si falta el contexto o no está disponible la generación
 - endpoints específicos para cada flujo de soporte
+
+El índice vectorial se crea de forma local en `data/chroma/` a partir de una
+representación compatible de cada política y `data/productos.json`. Las
+políticas se responden con fragmentos recuperados; para productos, el modelo
+compara el catálogo completo tras comprobar que existen fichas indexadas. Los
+pedidos no se vectorizan: se consultan por coincidencia exacta de su número de
+seguimiento. Los detalles de selección, segmentación e indexación están en las
+fases del Taller 2 enlazadas arriba.
 
 ### Casos soportados
 
@@ -44,7 +58,9 @@ La aplicación usa un enfoque RAG híbrido con estas capas:
 - El sistema decide si el caso es elegible, si faltan datos o si requiere agente humano
 
 #### Búsqueda de productos
-- El cliente puede consultar un producto por nombre o categoría
+- El cliente puede consultar productos por nombre, categoría o descripción en lenguaje natural
+- Para consultas semánticas, Chroma comprueba la disponibilidad de fichas indexadas y el modelo compara la solicitud con el catálogo completo; la similitud vectorial no decide por sí sola qué producto se ofrece
+- La identidad del producto se evalúa aparte de sus atributos: el sistema puede identificar el producto y aclarar cuando la ficha no confirma un detalle preguntado
 - El sistema devuelve información útil sobre el producto y su contexto
 
 #### Consulta de política
@@ -56,7 +72,7 @@ La aplicación usa un enfoque RAG híbrido con estas capas:
 - Se prioriza la incidencia y se indican pasos de resolución
 
 #### Métricas del servicio
-- Se expone un resumen de KPIs para evaluar eficiencia, escalamiento y automatización
+- Se expone un resumen demostrativo de KPIs; son valores fijos, no métricas obtenidas de conversaciones reales
 
 ---
 
@@ -64,22 +80,24 @@ La aplicación usa un enfoque RAG híbrido con estas capas:
 
 El flujo general del sistema es:
 
-1. El cliente hace una petición al backend
-2. FastAPI valida la entrada con Pydantic
-3. El backend recupera el contexto relevante desde los datos
-4. Se arma un prompt con instrucciones y contexto
-5. OpenAI responde en JSON estructurado
-6. La salida se valida con un esquema estricto
-7. Se devuelve la respuesta final o se activa fallback local
+1. El cliente hace una petición al backend y FastAPI valida la entrada.
+2. El backend busca el pedido por número exacto, recupera fragmentos de una
+   política o inicia la búsqueda semántica de productos.
+3. El prompt recibe el contexto correspondiente: pedido estructurado, fragmentos
+   de política o catálogo completo.
+4. OpenAI responde en JSON estructurado y la salida se valida con Pydantic.
+5. Se devuelven la respuesta y sus fuentes, o se aplica el manejo de fallback
+   definido para ese flujo.
 
 ```text
 Cliente HTTP
    ↓
 FastAPI
+   ├─ pedido: búsqueda exacta por seguimiento en pedidos.json
+   ├─ política: LangChain + Chroma → fragmentos y fuentes
+   └─ producto: Chroma → comprobación de fichas; catálogo completo al modelo
    ↓
-Recuperación de datos
-   ↓
-Prompt builder
+Prompt específico del flujo
    ↓
 OpenAI Responses API
    ↓
@@ -100,29 +118,40 @@ proyecto taller 1/
 ├── data/
 │   ├── pedidos.json
 │   ├── productos.json
-│   └── politica_devoluciones.md
+│   ├── politica_devoluciones.pdf
+│   ├── politica_envios.docx
+│   └── politica_garantias.json
 ├── src/
 │   ├── config.py
+│   ├── knowledge_base.py
 │   ├── main.py
 │   ├── models.py
 │   ├── openai_client.py
 │   ├── prompts.py
 │   └── retrieval.py
+├── tests/
+│   ├── test_knowledge_base.py
+│   └── test_rag_routes.py
 ├── 01_fase_1_modelo.md
 ├── 02_fase_2_riesgos.md
+├── 03_fase_1_componentes_rag.md
+├── 04_fase_2_base_conocimiento.md
+├── 05_fase_3_integracion_y_limitaciones.md
 └── .venv/
 ```
 
 ### Papel de cada parte
 
 - `src/main.py`: API principal con los endpoints
+- `src/knowledge_base.py`: carga, segmentación, indexación y recuperación de documentos
 - `src/models.py`: modelos Pydantic de entrada y salida
 - `src/prompts.py`: construcción de prompts para cada flujo
 - `src/openai_client.py`: cliente OpenAI y validación de schema JSON
 - `src/retrieval.py`: lectura y búsqueda del contexto
 - `data/pedidos.json`: datos de pedidos para el soporte operativo
 - `data/productos.json`: catálogo de productos
-- `data/politica_devoluciones.md`: política normativa del negocio
+- `data/politica_devoluciones.pdf`, `data/politica_envios.docx` y
+  `data/politica_garantias.json`: fuentes de políticas que se cargan en la base
 - `.env`: configuración de credenciales y modelo
 
 ---
@@ -160,11 +189,13 @@ Incluye:
 Se usa para responder preguntas sobre el catálogo o las características del producto.
 
 Incluye:
-- nombre del producto
-- categoría
-- precio
-- condiciones generales
-- mensaje del cliente
+- fichas del catálogo con nombre, descripción, categoría, precio y otros datos
+- comparación de la intención del cliente con todos los productos disponibles
+- una aclaración cuando la ficha no documenta la característica preguntada
+
+La búsqueda vectorial no confirma una coincidencia: la selección semántica la
+realiza el modelo comparando el catálogo completo. El backend valida el nombre
+seleccionado y devuelve los atributos y la fuente del registro correspondiente.
 
 ### Prompt de política
 
@@ -186,11 +217,12 @@ Incluye:
 
 ## 6. Rol de los datos en la solución
 
-La data es fundamental porque el modelo no debe “memorizar” la lógica del negocio. En esta solución, la información se recupera desde archivos reales del proyecto.
+La data es fundamental porque el modelo no debe “memorizar” la lógica del
+negocio. La información se recupera desde los archivos del proyecto.
 
 ### `data/pedidos.json`
 
-Contiene registros de pedidos con:
+Contiene 30 registros de ejemplo para probar el flujo de pedidos. Cada registro incluye:
 - número de seguimiento
 - estado
 - fecha estimada
@@ -198,20 +230,52 @@ Contiene registros de pedidos con:
 - enlace de rastreo
 - producto relacionado
 
+Los códigos de seguimiento van de `ECO-10001` a `ECO-10030`. El archivo es una
+fuente local de prueba, no una conexión a pedidos en operación; sus enlaces de
+rastreo usan el dominio de ejemplo.
+
 ### `data/productos.json`
 
 Contiene información del catálogo con:
 - nombre
+- descripción y uso principal
 - categoría
 - precio
 - condición
 - si es personalizado
 
-### `data/politica_devoluciones.md`
+El catálogo incluye jabones de distintos tipos, camisetas, pantalones,
+botellas, termos y recipientes para alimentos, entre otras categorías. Sus
+descripciones detallan el uso principal para mejorar la comparación de consultas
+semánticas con cada producto. En esta versión contiene 68 fichas con SKU únicos.
 
-Guarda la política de devoluciones del negocio y sirve como fuente normativa para decisiones automatizadas.
+### Políticas de conocimiento
+
+Las fuentes oficiales de políticas son `data/politica_devoluciones.pdf`,
+`data/politica_envios.docx` y `data/politica_garantias.json`, para devoluciones,
+envíos y garantías, respectivamente. Se editan directamente en sus formatos
+correspondientes; no dependen de copias Markdown ni de un paso de conversión.
 
 La diferencia clave es que el LLM nunca debe tomar decisiones basadas solo en su memoria. Siempre debe trabajar con contexto explícito y fuente documental.
+
+Las políticas y el catálogo se recuperan semánticamente con embeddings
+multilingües locales. El índice se reconstruye al detectar cambios en los
+archivos fuente. Los pedidos continúan en la consulta exacta y no se envían al
+índice vectorial.
+
+### Formatos de documentos de conocimiento
+
+El cargador de la base admite políticas Markdown (`.md`), PDF (`.pdf`), Word
+Open XML (`.docx`) y documentos JSON con un campo `contenido` de texto. El
+catálogo de productos se carga como JSON. En esta entrega, las tres políticas
+oficiales están directamente en PDF, DOCX y JSON, respectivamente.
+
+Si para una categoría existen varias representaciones, se indexa solo una para
+evitar duplicar la misma política. El orden de preferencia es PDF, DOCX, JSON y
+Markdown. El índice de Chroma se reconstruye automáticamente en la siguiente
+consulta cuando detecta cambios en los archivos fuente. Para ejecutar pruebas
+con un índice limpio, detén la API y elimina el directorio `data/chroma/`; la
+aplicación lo volverá a crear al procesar la siguiente consulta.
 
 ---
 
@@ -242,8 +306,8 @@ Ejemplo:
 curl -X POST "http://127.0.0.1:8000/api/orders/status" \
   -H "Content-Type: application/json" \
   -d '{
-    "tracking_number": "ECO-10003",
-    "customer_id": "CUST-1003",
+    "tracking_number": "ECO-10030",
+    "customer_id": "CUST-1030",
     "channel": "chat"
   }'
 ```
@@ -345,8 +409,9 @@ Estas métricas permiten evaluar si la IA está ayudando realmente a la operaci�
 
 ### Requisitos
 
-- Python 3.10+
-- acceso a una API de OpenAI
+- Python 3.9+
+- clave/modelo de OpenAI para generación normal (opcional para probar los fallbacks)
+- conexión a internet la primera vez para descargar el modelo de embeddings
 - entorno virtual local
 
 ### Crear entorno virtual
@@ -364,13 +429,25 @@ pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-### Configurar .env
+### Ejecutar pruebas
+
+```bash
+python -m unittest discover -s tests -v
+```
+
+### Configurar `.env`
 
 ```env
-OPENAI_API_KEY=tu_api_key_real
+OPENAI_API_KEY=
 OPENAI_MODEL=gpt-6-sol
 OPENAI_TIMEOUT=30
+RAG_EMBEDDING_MODEL=sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
 ```
+
+Se puede copiar `.env.example` como punto de partida. No es necesario ejecutar
+un modelo local de generación: se conserva GPT-6 Sol para mantener la
+integración definida en el Taller 1, mientras que los embeddings multilingües
+se calculan localmente para las consultas en español.
 
 ---
 
@@ -391,7 +468,17 @@ Luego puedes abrir:
 
 ## 12. Modo de fallback
 
-Si OpenAI no está disponible, la aplicación sigue respondiendo con una solución local. Esto ayuda a mantener la demo operativa y evitar un fallo total del sistema.
+Si OpenAI no está disponible, el estado del pedido y las búsquedas exactas de
+productos pueden responderse con datos locales. Una búsqueda semántica de
+productos que requiere comparar el catálogo responde con error de servicio para
+no elegir arbitrariamente. Las consultas de política muestran los fragmentos
+recuperados y solicitan revisión humana; una devolución no se marca elegible sin
+evaluación del modelo. Si no se recupera una política, el caso se escala en vez
+de completar la respuesta con reglas supuestas.
+
+La carga local de embeddings requiere descargar el modelo la primera vez. Si
+falla esa inicialización o Chroma, el error de recuperación se muestra como un
+fallo del endpoint; no se sustituye silenciosamente por datos inventados.
 
 ---
 

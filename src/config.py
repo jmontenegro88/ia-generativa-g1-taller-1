@@ -13,3 +13,11 @@ OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-6-sol")
 OPENAI_TIMEOUT = float(os.getenv("OPENAI_TIMEOUT", "30"))
 
 DATA_DIR = BASE_DIR / "data"
+RAG_EMBEDDING_MODEL = os.getenv(
+    "RAG_EMBEDDING_MODEL",
+    "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+)
+RAG_VECTOR_STORE_DIR = DATA_DIR / "chroma"
+RAG_CHUNK_SIZE = 800
+RAG_CHUNK_OVERLAP = 120
+RAG_TOP_K = 4

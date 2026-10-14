@@ -22,6 +22,7 @@ class ProductRecord(BaseModel):
     sku: str
     name: str
     category: str
+    description: Optional[str] = None
     custom: bool = False
     condition: str = "nuevo"
     price: Optional[float] = None
