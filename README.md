@@ -4,6 +4,40 @@ Este proyecto implementa un asistente de demostración para EcoMarket con una ar
 
 La idea principal es combinar datos operativos del negocio con prompts bien definidos y el modelo seleccionado en la parte documental, GPT-6 Sol, para responder con precisión, control y trazabilidad, evitando que el modelo invente información.
 
+## Entrega del Proyecto Final: agente de IA para devoluciones
+
+El asistente ahora ejecuta el proceso de devolución: verifica la elegibilidad
+del producto y genera la etiqueta de devolución. Usa un agente LangChain con
+herramientas y una interfaz web en Streamlit.
+
+- [Fase 1: diseño de la arquitectura del agente](./06_proyecto_final_fase_1_arquitectura.md):
+  herramientas, RAG como herramienta, router de respaldo, elección de LangChain
+  y diagrama de flujo.
+- [Fase 2: implementación y conexión de componentes](./07_proyecto_final_fase_2_implementacion.md):
+  estructura del código, manejo de éxito y error, evaluación del comportamiento.
+- [Fase 3: análisis crítico y propuestas de mejora](./08_proyecto_final_fase_3_analisis_critico.md):
+  riesgos éticos y de seguridad, monitoreo y alertas, nuevas funcionalidades.
+- [Fase 4: despliegue de la aplicación](./09_proyecto_final_fase_4_despliegue.md):
+  elección de Streamlit, ejecución y guion del video.
+
+Inicio rápido:
+
+```bash
+source .venv/bin/activate
+pip install -r requirements.txt
+streamlit run app.py                      # interfaz web en http://localhost:8501
+python scripts/evaluar_agente.py          # evaluación de comportamiento (17 casos)
+python -m pytest -q                       # pruebas automatizadas
+```
+
+| Herramienta del agente | Función |
+| --- | --- |
+| `verificar_elegibilidad_producto` | Aplica las reglas de la política de devoluciones y garantías al pedido |
+| `generar_etiqueta_devolucion` | Emite RMA, guía y etiqueta; re-verifica la elegibilidad antes de emitir |
+| `consultar_estado_pedido` | Estado, fecha y transportadora del pedido |
+| `escalar_a_agente_humano` | Crea un ticket para casos que requieren revisión |
+| `consultar_politicas` | RAG del Taller 2 (Chroma) incorporado como herramienta |
+
 ## Entrega del Taller 2
 
 - [Fase 1: componentes RAG](./03_fase_1_componentes_rag.md)
@@ -115,6 +149,10 @@ proyecto taller 1/
 ├── .env
 ├── README.md
 ├── requirements.txt
+├── app.py                      # Proyecto final: interfaz Streamlit
+├── scripts/
+│   └── evaluar_agente.py       # Proyecto final: evaluación de comportamiento
+├── runtime/                    # generado: etiquetas, tickets y bitácora (no se versiona)
 ├── data/
 │   ├── pedidos.json
 │   ├── productos.json
@@ -122,6 +160,10 @@ proyecto taller 1/
 │   ├── politica_envios.docx
 │   └── politica_garantias.json
 ├── src/
+│   ├── agent.py                # Proyecto final: agente LangChain + router de respaldo
+│   ├── agent_tools.py          # Proyecto final: herramientas y reglas de devolución
+│   ├── action_log.py           # Proyecto final: bitácora y métricas
+│   ├── return_registry.py      # Proyecto final: etiquetas y tickets simulados
 │   ├── config.py
 │   ├── knowledge_base.py
 │   ├── main.py
@@ -130,6 +172,8 @@ proyecto taller 1/
 │   ├── prompts.py
 │   └── retrieval.py
 ├── tests/
+│   ├── test_agent.py
+│   ├── test_agent_tools.py
 │   ├── test_knowledge_base.py
 │   └── test_rag_routes.py
 ├── 01_fase_1_modelo.md
@@ -137,6 +181,10 @@ proyecto taller 1/
 ├── 03_fase_1_componentes_rag.md
 ├── 04_fase_2_base_conocimiento.md
 ├── 05_fase_3_integracion_y_limitaciones.md
+├── 06_proyecto_final_fase_1_arquitectura.md
+├── 07_proyecto_final_fase_2_implementacion.md
+├── 08_proyecto_final_fase_3_analisis_critico.md
+├── 09_proyecto_final_fase_4_despliegue.md
 └── .venv/
 ```
 
@@ -386,6 +434,24 @@ Ejemplo:
 curl http://127.0.0.1:8000/api/metrics/summary
 ```
 
+### 7) Agente de devoluciones (Proyecto final)
+
+`POST /api/agent/chat`: conversación con el agente. `history` lleva los turnos
+anteriores y `customer_id` es el cliente de la sesión.
+
+```bash
+curl -X POST "http://127.0.0.1:8000/api/agent/chat" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "message": "Quiero devolver el pedido ECO-10013, está nuevo y sin uso",
+    "history": [],
+    "customer_id": "CUST-1013"
+  }'
+```
+
+`GET /api/agent/actions?limit=20` devuelve la bitácora reciente.
+`GET /api/agent/metrics` devuelve métricas calculadas desde esa bitácora.
+
 ---
 
 ## 9. Métricas clave del sistema
@@ -409,7 +475,7 @@ Estas métricas permiten evaluar si la IA está ayudando realmente a la operaci�
 
 ### Requisitos
 
-- Python 3.9+
+- Python 3.10+ (LangChain 1.x lo requiere)
 - clave/modelo de OpenAI para generación normal (opcional para probar los fallbacks)
 - conexión a internet la primera vez para descargar el modelo de embeddings
 - entorno virtual local
@@ -432,6 +498,8 @@ pip install -r requirements.txt
 ### Ejecutar pruebas
 
 ```bash
+python -m pytest -q
+# o bien
 python -m unittest discover -s tests -v
 ```
 
@@ -442,7 +510,13 @@ OPENAI_API_KEY=
 OPENAI_MODEL=gpt-6-sol
 OPENAI_TIMEOUT=30
 RAG_EMBEDDING_MODEL=sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
+AGENT_REFERENCE_DATE=2026-10-27
 ```
+
+`AGENT_REFERENCE_DATE` fija la fecha «de hoy» con la que el agente calcula los
+plazos de devolución. Así la demostración da los mismos resultados con los
+datos de ejemplo, sin depender del día en que se ejecute. Si no se define, se
+usa la fecha del sistema.
 
 Se puede copiar `.env.example` como punto de partida. No es necesario ejecutar
 un modelo local de generación: se conserva GPT-6 Sol para mantener la
@@ -452,6 +526,15 @@ se calculan localmente para las consultas en español.
 ---
 
 ## 11. Cómo ejecutar la aplicación
+
+Interfaz web del agente (Proyecto final):
+
+```bash
+source .venv/bin/activate
+streamlit run app.py
+```
+
+API REST:
 
 ```bash
 source .venv/bin/activate

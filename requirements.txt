@@ -1,4 +1,4 @@
-# Dependencias previstas para la fase de implementacion
+# Taller 1 y 2: API, RAG y generación estructurada
 openai
 fastapi
 uvicorn
@@ -13,3 +13,9 @@ langchain-huggingface
 langchain-text-splitters
 pypdf
 python-docx
+
+# Proyecto final: agente con herramientas e interfaz web
+langchain>=1.0,<2
+langchain-openai>=1.0,<2
+streamlit>=1.40
+pytest

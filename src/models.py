@@ -122,3 +122,16 @@ class TriageResponse(BaseModel):
     resumen: str
     pasos_siguientes: List[str] = Field(default_factory=list)
     fuentes: List[str] = Field(default_factory=list)
+
+
+class AgentChatMessage(BaseModel):
+    role: Literal["user", "assistant"]
+    content: str = Field(max_length=8000)
+
+
+class AgentChatQuery(BaseModel):
+    message: str = Field(max_length=8000)
+    history: List[AgentChatMessage] = Field(default_factory=list, max_length=50)
+    # En producción vendría del token de sesión, no del cuerpo de la petición.
+    customer_id: Optional[str] = None
+    session_id: Optional[str] = None

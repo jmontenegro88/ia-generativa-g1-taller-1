@@ -31,7 +31,7 @@ modelo pudiera inventar.
 
 ## Requisitos y arranque
 
-Se requiere Python 3.9 o superior, dependencias de `requirements.txt` (incluidos
+Se requiere Python 3.10 o superior, dependencias de `requirements.txt` (incluidos
 los lectores de PDF y DOCX), acceso a Hugging Face durante la primera carga del
 modelo de embeddings y, para generación normal, una clave/modelo válidos de
 OpenAI.

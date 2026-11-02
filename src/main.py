@@ -3,6 +3,7 @@ from __future__ import annotations
 from fastapi import FastAPI, HTTPException
 
 from src.models import (
+    AgentChatQuery,
     OrderStatusQuery,
     OrderStatusResponse,
     PolicyQuery,
@@ -35,9 +36,21 @@ from src.retrieval import (
     load_products,
 )
 
-app = FastAPI(title="EcoMarket AI Assistant", version="0.1.0")
+app = FastAPI(title="EcoMarket AI Assistant", version="0.2.0")
 openai_client = OpenAIClient()
 knowledge_base = KnowledgeBase()
+_return_agent = None
+
+
+def get_return_agent():
+    """Agente del proyecto final; comparte la base de conocimiento del Taller 2."""
+    global _return_agent
+    if _return_agent is None:
+        from src.agent import EcoMarketAgent
+        from src.agent_tools import ReturnService
+
+        _return_agent = EcoMarketAgent(service=ReturnService(knowledge_base=knowledge_base))
+    return _return_agent
 
 
 def local_order_response(order):
@@ -444,6 +457,31 @@ def support_triage(query: TriageQuery):
         "response": response.model_dump(),
         "mode": mode,
     }
+
+
+@app.post("/api/agent/chat")
+def agent_chat(query: AgentChatQuery):
+    """Proyecto final: conversación con el agente de devoluciones."""
+    response = get_return_agent().chat(
+        query.message,
+        history=[message.model_dump() for message in query.history],
+        customer_id=query.customer_id,
+        session_id=query.session_id,
+    )
+    return response.to_dict()
+
+
+@app.get("/api/agent/actions")
+def agent_actions(limit: int = 20):
+    """Últimas acciones registradas en la bitácora del agente."""
+    limit = max(1, min(limit, 200))
+    return {"acciones": get_return_agent().logger.read_recent(limit)}
+
+
+@app.get("/api/agent/metrics")
+def agent_metrics():
+    """Indicadores calculados desde la bitácora real del agente."""
+    return get_return_agent().logger.summary()
 
 
 @app.get("/api/metrics/summary")
